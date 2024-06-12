@@ -7,24 +7,20 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 
 /**
  *
- * @author rafael.tolomeotti
+ * @author guest01
  */
 public class mysql {
-    public static Connection conexão(){
-         try {
+    public static Connection conexao(){
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-              return DriverManager.getConnection("jdbc:mysql://localhost/db_biblioteca_senac?" +
+            return DriverManager.getConnection("jdbc:mysql://localhost/db_biblioteca_senac?" +
                                    "user=root&password=root");
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao conectar o bando de dados");
+            throw new RuntimeException("Erro ao conectar no banco de dados");
         }
     }
-
-    public static void closeConnection(Connection conn, PreparedStatement stmt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

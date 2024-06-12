@@ -14,35 +14,63 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.mAutores;
-import model.mEditoras;
 
+/**
+ *
+ * @author guest01
+ */
 public class cAutores {
-    
-    public List<mEditoras> pesquisar(String texto) {
 
-        Connection conn = mysql.conexão();
+    public void cadastrar(mAutores modelA) {
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<mEditoras> lista = new ArrayList<>();
+        try {
+            stmt = conn.prepareStatement("INSERT INTO autores (nome,endereco,numero,bairro,cidade,cpf) VALUES (?,?,?,?,?,?)");
+            stmt.setString(1, modelA.getNome());
+            stmt.setString(2, modelA.getEndereco());
+            stmt.setString(3, modelA.getNumero());
+            stmt.setString(4, modelA.getBairro());
+            stmt.setString(5, modelA.getCidade());
+            stmt.setString(6, modelA.getCpf());
+
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Autor(a) cadastrados com sucesso!");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public List<mAutores> listar() {
+
+        Connection conn = mysql.conexao();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        List<mAutores> lista = new ArrayList<>();
 
         try {
-            stmt = conn.prepareStatement("SELECT nome, endereco, numero, bairro, cidade, cpf \n" +
-                "FROM editoras \n" + "WHERE nome LIKE ?");
-            stmt.setString(1, "%" + texto +  "%");
+            stmt = conn.prepareStatement("SELECT * FROM autores");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                mEditoras modelE = new mEditoras();
-                modelE.setId_editora(rs.getInt("id_editora"));
+                mAutores modelE = new mAutores();
+                modelE.setId_autor(rs.getInt("id_autor"));
                 modelE.setNome(rs.getString("nome"));
                 modelE.setEndereco(rs.getString("endereco"));
-                modelE.setNumero(rs.getString("numero"));
                 modelE.setBairro(rs.getString("bairro"));
+                modelE.setNumero(rs.getString("numero"));
                 modelE.setCidade(rs.getString("cidade"));
                 modelE.setCpf(rs.getString("cpf"));
+
                 lista.add(modelE);
 
             }
@@ -52,56 +80,59 @@ public class cAutores {
         }
 
         return lista;
+
     }
-    
-    public void cadastrar(mAutores autor) {
-        Connection conn = mysql.conexão();
-        PreparedStatement stmt = null;
-        
-        try {
-            stmt = conn.prepareStatement("INSERT INTO autores (nome, endereco, numero, bairro, cidade, cpf) VALUES (?, ?, ?, ?, ?, ?)");
-            stmt.setString(1, autor.getNome());
-            stmt.setString(2, autor.getEndereco());
-            stmt.setString(3, autor.getNumero());
-            stmt.setString(4, autor.getBairro());
-            stmt.setString(5, autor.getCidade());
-            stmt.setString(6, autor.getCpf());
-            
-            stmt.executeUpdate();
-            
-            System.out.println("Autor cadastrado com sucesso!");
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
+    public List<mAutores> pesquisar(String texto, int filtro) {
 
-    }        
-
-        public List<mAutores> listar(String texto) {
-
-        Connection conn = mysql.conexão();
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        List<mEditoras> lista = new ArrayList<>();
+        List<mAutores> lista = new ArrayList<>();
 
         try {
-            stmt = conn.prepareStatement("SELECT nome, endereco, numero, bairro, cidade, cpf \n" +
-                "FROM editoras \n" + "WHERE nome LIKE ?");
-            stmt.setString(1, "%" + texto +  "%");
+
+            switch (filtro) {
+                case 0:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE id_autor like ?");
+                    break;
+                case 1:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE nome like ?");
+                    break;
+                case 2:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE endereco like ?");
+                    break;
+                case 3:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE numero like ?");
+                    break;
+                case 4:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE bairro like ?");
+                    break;
+                case 5:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE cidade like ?");
+                    break;
+                case 6:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE cpf like ?");
+                    break;
+                default:
+                    stmt = conn.prepareStatement("SELECT * FROM autores WHERE nome like ?");
+                    break;
+            }
+            stmt.setString(1, "%" + texto + "%");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                mEditoras modelE = new mEditoras();
-                modelE.setId_editora(rs.getInt("id_editora"));
+                mAutores modelE = new mAutores();
+                modelE.setId_autor(rs.getInt("id_autor"));
                 modelE.setNome(rs.getString("nome"));
                 modelE.setEndereco(rs.getString("endereco"));
-                modelE.setNumero(rs.getString("numero"));
                 modelE.setBairro(rs.getString("bairro"));
+                modelE.setNumero(rs.getString("numero"));
                 modelE.setCidade(rs.getString("cidade"));
                 modelE.setCpf(rs.getString("cpf"));
+
                 lista.add(modelE);
 
             }
@@ -109,13 +140,56 @@ public class cAutores {
         } catch (SQLException ex) {
             Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
 
-    
+        return lista;
+
     }
 
-    public Iterable<mAutores> listar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
- 
+    public void alterar(mAutores modelE) {
+        Connection conn = mysql.conexao();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = conn.prepareStatement("UPDATE autores SET nome = ?, endereco = ?, bairro = ?, numero = ?, cidade = ?, cpf = ? WHERE id_autor = ? ");
+            stmt.setString(1, modelE.getNome());
+            stmt.setString(2, modelE.getEndereco());
+            stmt.setString(3, modelE.getBairro());
+            stmt.setString(4, modelE.getNumero());
+            stmt.setString(5, modelE.getCidade());
+            stmt.setString(6, modelE.getCpf());
+            stmt.setInt(7, modelE.getId_autor());
+
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Autor(a) alterado com sucesso!");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null,
+                    ex);
         }
+
+    }
+
+    public void excluir(mAutores modelE) {
+        Connection conn = mysql.conexao();
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            stmt = conn.prepareStatement("DELETE FROM autores WHERE id_autor  = ?");
+            stmt.setInt(1, modelE.getId_autor());
+
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Autor(a) excluída com sucesso!");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+}

@@ -7,7 +7,7 @@ package model;
 
 /**
  *
- * @author rafael.tolomeotti
+ * @author guest01
  */
 public class mEditoras {
     private int id_editora;
@@ -28,26 +28,9 @@ public class mEditoras {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public void setEndereco(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setNumero(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setCidade(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setBairro(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setCpf(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
-    
+    @Override
+    public String toString(){
+        return getNome();
+    }
 }

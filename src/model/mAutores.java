@@ -7,24 +7,23 @@ package model;
 
 /**
  *
- * @author rafael.tolomeotti
+ * @author guest01
  */
 public class mAutores {
-    private int id;
+    private int id_autor;
     private String nome;
     private String endereco;
     private String numero;
     private String bairro;
     private String cidade;
     private String cpf;
-    private int id_editora;
 
-    public int getId() {
-        return id;
+    public int getId_autor() {
+        return id_autor;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId_autor(int id_autor) {
+        this.id_autor = id_autor;
     }
 
     public String getNome() {
@@ -75,18 +74,9 @@ public class mAutores {
         this.cpf = cpf;
     }
 
-    public int getId_editora() {
-        return id_editora;
+    @Override
+    public String toString(){
+        return getNome();
     }
-
-    public void setId_editora(int id_editora) {
-        this.id_editora = id_editora;
-    }
-
-    public int getId_autor() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
 
 }

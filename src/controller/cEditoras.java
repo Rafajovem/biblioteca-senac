@@ -19,12 +19,12 @@ import model.mEditoras;
 
 /**
  *
- * @author rafael.tolomeotti
+ * @author guest01
  */
 public class cEditoras {
 
     public void cadastrar(mEditoras modelE) {
-        Connection conn = mysql.conexão();
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -35,7 +35,7 @@ public class cEditoras {
 
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Editora Cadastrada");
+            JOptionPane.showMessageDialog(null, "Editora cadastrada com sucesso!");
 
         } catch (SQLException ex) {
             Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,7 +45,7 @@ public class cEditoras {
 
     public List<mEditoras> listar() {
 
-        Connection conn = mysql.conexão();
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -75,7 +75,7 @@ public class cEditoras {
 
     public List<mEditoras> pesquisar(String texto, int filtro) {
 
-        Connection conn = mysql.conexão();
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -83,15 +83,17 @@ public class cEditoras {
         List<mEditoras> lista = new ArrayList<>();
 
         try {
+
             if (filtro == 0) {
                 stmt = conn.prepareStatement("SELECT * FROM editoras WHERE id_editora = ?");
                 stmt.setString(1, texto);
                 rs = stmt.executeQuery();
             } else {
-                stmt = conn.prepareStatement("SELECT * FROM editoras WHERE nome LIKE ?");
+                stmt = conn.prepareStatement("SELECT * FROM editoras WHERE nome like ?");
                 stmt.setString(1, "%" + texto + "%");
                 rs = stmt.executeQuery();
             }
+
             while (rs.next()) {
                 mEditoras modelE = new mEditoras();
                 modelE.setId_editora(rs.getInt("id_editora"));
@@ -110,39 +112,40 @@ public class cEditoras {
     }
 
     public void alterar(mEditoras modelE) {
-        Connection conn = mysql.conexão();
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
-            stmt = conn.prepareStatement("UPDATE  editoras SET nome = ? WHERE id_editora = ? ");
+            stmt = conn.prepareStatement("UPDATE editoras SET nome = ? WHERE id_editora = ? ");
             stmt.setString(1, modelE.getNome());
             stmt.setInt(2, modelE.getId_editora());
 
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Editora Alterada");
+            JOptionPane.showMessageDialog(null, "Editora alterada com sucesso!");
 
         } catch (SQLException ex) {
-            Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null,
+                    ex);
         }
 
     }
 
     public void excluir(mEditoras modelE) {
-        Connection conn = mysql.conexão();
+        Connection conn = mysql.conexao();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
-            stmt = conn.prepareStatement("DELETE FROM editoras WHERE id_editora = ?");
+            stmt = conn.prepareStatement("DELETE FROM editoras WHERE id_editora  = ?");
             stmt.setInt(1, modelE.getId_editora());
 
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Editora Deletada");
+            JOptionPane.showMessageDialog(null, "Editora excluída com sucesso!");
 
         } catch (SQLException ex) {
             Logger.getLogger(cEditoras.class.getName()).log(Level.SEVERE, null, ex);
